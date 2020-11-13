@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor Mundial de Divisas</title>
+    <link rel="icon" type="ico" href="../img/logo.ico"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="../css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper white">
+            <a href="../index.html" class="brand-logo"><img src="../img/logoCD.png" class="logo" ></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="../index.html">Como usar</a></li>
+            <li><a href="#footer">Acerca de</a></li>
+            <li><a href="#footer">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!--Seleccion de monedas a convertir-->
+    <div id="App" class="SecConversor">
+      <div class="row">
+        <form class="col s12">
+          <div class="row">
+            <h4 style="text-align: center;" class="indigo-text">Conversor de Divisas</h4>
+            <h6 style="text-align: center;" class="grey-text">Selecciona las moneda que desees convertir</h6>
+            <!--Monedas disponibles-->
+            <div class="input-field col s12">
+              <select id="mon1" v-model="from">
+                <option :value="moneda.id" v-for="moneda in formatearMonedas">{{moneda.currencyName}}</option>
+              </select>
+              <label>Seleccionar Primer Moneda</label>
+            </div>
+            
+            <!--Moneda a convertir-->
+            <div class="input-field col s12">
+              <select id="mon2" v-model="to">
+                <option :value="moneda.id" v-for="moneda in formatearMonedas">{{moneda.currencyName}}</option>
+              </select>
+              <label>Seleccionar moneda equivalente</label>
+            </div>
+
+            <!--Cantidad -->
+            <div class="row">
+              <div class="col-md-3 offset-md-3">
+                <input v-model="cantidad" id="cantidad" onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" @click="convertirMoneda()" autocomplete="off" type="text" style="width: 50%; margin-left: 25%;" class="textCantidad" placeholder="Ingresar cantidad">
+              </div>
+            </div>
+          </div>
+        </form>
+        <!--Botón para convertir-->
+            <div class="row">
+              <div class="col-md-6 offset-md-6">
+                <button :disabled="deshabilitado" onclick="capturar();" style="width: 30%; margin-left: 35%;" class="btn waves-effect waves-light">Convertir y Guardar
+                  <i class="material-icons right">find_replace</i>
+                </button>
+              </div>
+            </div>
+
+            <!--Mostrar el valor-->
+            <div class="row">
+              <div class="col-md-6 offset-md-3">
+                <h4 id="resultado" style="text-align: center;" class="indigo-text">$ {{calcularResultado}}</h4>
+              </div>
+            </div>
+      </div>
+    </div>
+    <div class="SecHistorial">
+      <h4 style="text-align: center;" class="indigo-text">Historial de Conversiones</h4>
+      <h6 style="text-align: center;" class="grey-text">Registro de las conversiones hechas recientemente en el sistema</h6>
+      
+      <table id="tabla" class="highlight responsive-table centered">
+        <thead>
+          <tr>
+              <th>Moneda</th>
+              <th>Cantidad</th>
+              <th>Convertir a</th>
+              <th>Resultado</th>
+          </tr>
+        </thead>
+      </table>
+
+
+    </div>
+
+
+
+    <!--Footer-->
+    <footer id="footer" class="page-footer white">
+        <div class="container">
+          <div class="row">
+            <div class="col l6 s12">
+              <h5 class="indigo-text">Conversor Mundial de Divisas</h5>
+              <p style="text-align: justify;" class="black-text text-lighten-4 ">Todas las cifras son tipos de cambio del mercado medio en tiempo real, que no están disponibles para los clientes individuales y sirven solo de referencia. Para ver los tipos que cotizamos para las transferencias de dinero, use nuestro servicio de transferencias.</p>
+    
+    
+            </div>
+            <div class="col l3 s12">
+              <h5 class="indigo-text">Acerca de</h5>
+              <ul>
+                <li><a class="grey-text" style="text-align: justify;" href="#!"><p>Conversor mundial de divisas como parte del proyecto de cátedra de la materia Lenguaje interpretado en el cliente - Universidad son bosco, busca ofrecer a los usuarios un sistema de conversión de divisas óptimo y funcional</p></a></li>
+              </ul>
+            </div>
+            <div class="col l3 s12">
+              <h5 class="indigo-text">Redes sociales</h5>
+              <ul>
+                <li><a class="grey-text" href="https://www.instagram.com/davidmejiaa19/">instagram/davidmejiaa19</a></li>
+                <li><a class="grey-text" href="https://www.instagram.com/kevinhqz/">instagram/kevinhqz</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="footer-copyright">
+          <div class="container black-text">
+          Designed with <a class="brown-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+          </div>
+        </div>
+      </footer>
+    
+    
+      <!--  Scripts-->
+      <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script src="../js/materialize.js"></script>
+      <script src="../js/init.js"></script>
+      <!-- development version, includes helpful console warnings -->
+      <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js"></script>
+      <script src="../js/app.js"></script>
+      <!--Alertas dinámicas-->
+      <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</body>
+</html>
